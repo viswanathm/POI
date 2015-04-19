@@ -1,0 +1,190 @@
+	  html, body{
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+		font-family: "Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+      }
+      table {
+        font-size: 12px;
+      }
+	  #header {
+        width: 100%;
+        height: 10%;
+		background-color: #44BDCC;
+        margin: 0px;
+        padding: 0px
+	  }
+	  #logo {
+		font-size: 30px;
+		color: white;
+		font-weight: bold;
+		margin: 10px 0px;
+		vertical-align: middle;
+		margin: 0px 30px;
+	  }
+      #map-canvas {
+        width: 100%; 
+		height: 90%;
+        margin: 0px;
+        padding: 0px
+      }
+      #listing {
+        position: absolute;
+        width: 430px;
+        height: 90%;
+        overflow: auto;
+        right: 0px;
+        bottom: 0px;
+        cursor: pointer;
+        overflow-x: hidden;
+		background-color: #fff;
+      }
+      #findhotels {
+        position: absolute;
+        text-align: right;
+        width: 100px;
+        font-size: 14px;
+        padding: 4px;
+        z-index: 5;
+        background-color: #fff;
+      }
+      #locationField {
+        position: absolute;
+        width: 190px;
+        height: 25px;
+        left: 108px;
+        top: 0px;
+        z-index: 5;
+        background-color: #fff;
+      }
+      #controls {
+        position: absolute;
+        left: 300px;
+        width: 140px;
+        top: 0px;
+        z-index: 5;
+        background-color: #fff;
+      }
+      #autocomplete {
+        height: 70%;
+		width: 300px;
+		margin: 5px 0px;
+		padding-left: 10px;
+		font-weight: bold;
+		background: #fff url("../img/current_location.png") no-repeat right center;
+		background-size: contain;
+      }
+      #country {
+        width: 100%;
+		display: none;
+      }
+	  .details .name{
+		font-weight: bold;
+		font-size: 14px;
+	  }
+      .placeIcon {
+        width: 20px;
+        height: 34px;
+        margin: 0px 35px 0px 10px;
+      }
+      .hotelIcon {
+        width: 24px;
+        height: 24px;
+      }
+      #resultsTable {
+        border-collapse: collapse;
+        width: 100%;
+      }
+	  #resultsTable tr{
+        border-bottom: 1px solid #ccc;
+		border-left: 2px solid #FFF;
+		background-color: #FFF;
+		height: 120px;	
+      }
+	  #resultsTable tr:hover{
+		border-left: 2px solid #44BDCC;
+      }
+	  #resultsTable tr td.index{
+		color: #CCC;
+      }
+	  
+	  #resultsTable tr td.details {
+		width: 70%;
+		padding-bottom: 10px;
+		padding-left: 5px;
+	  }
+	  
+	  #resultsTable tr td.details p.name{		
+		font-size: 18px;
+		font-weight: bold;
+	  }
+	  #rating {
+        font-size: 13px;
+        font-family: Arial Unicode MS;
+      }
+      .iw_table_row {
+        height: 18px;
+      }
+      .iw_attribute_name {
+        font-weight: bold;
+        text-align: right;
+      }
+      .iw_table_icon {
+        text-align: right;
+      }
+	  #iw-url a{	
+		text-decoration: none;
+		font-size: 18px;
+		font-family: sans-serif;
+		color: #000;
+	  }
+	  #info-content {
+		position: relative;
+		display: none;
+	  }
+	  #sort{
+		float: right;
+		margin: 0px 10px 0px 0px;
+	  }
+	  .control-panel{
+		width: 100%;
+		height: 30px;
+		background: #ECECD4;
+		line-height: 35px;
+		padding: 5px;
+		border-bottom: 1px solid #ccc;
+	  }
+	  .control-panel .title{
+		font-weight: bold;
+		font-size: 12px;
+	  }
+	  .pic { 
+		margin: 0px 80px 0px 0px
+	  }	  
+	  .banner {
+		background-color: #44BDCC;
+		color: #FFF;
+		height: 10%;
+	  }
+	  .error-desc {
+		font-style: italic;
+		color: red;
+		font-size: 12px;
+		float: right;
+	  }
+	  
+	  .rating_bar {
+		width: 80px;
+		height: 16px;
+		background: url(../img/stars.png);
+		background-repeat: repeat-x;
+		background-position: 0 0;
+		text-align: left;
+		float: left;
+	  }
+      .rating {
+		height: 16px;
+		background: url(../img/stars.png);
+		background-position: 0 -16px;
+		background-repeat: repeat-x;
+	  }

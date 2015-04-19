@@ -1,0 +1,117 @@
+<html>
+<head>
+	<title>EATR</title>
+	<!-- INCLUDE REQUIRED THIRD PARTY LIBRARY JAVASCRIPT AND CSS -->
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+		
+	<script>
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			currentLocation = position.coords;
+		}, function(error){
+			errorDesc = "";
+			switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorDesc = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorDesc = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    errorDesc = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorDesc = "An unknown error occurred."
+                    break;
+            }
+		});
+    }
+	</script>
+	
+	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
+	<link rel="stylesheet" href="css/main.css">
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+	<script type="text/javascript" src="js/eatr-app/app.js"></script>
+	<script type="text/javascript" src="js/eatr-app/controllers/mainController.js"></script>
+</head>
+<body ng-app="EatrApp" ng-controller="mainController" ng-init="init()">
+   <div id="header">
+            <span id="logo">EATR</span>			
+			<input id="autocomplete" placeholder="Enter a city" type="text" />
+			<span class="error-desc" ng-show="errorDesc">Note: {{errorDesc}}</span>
+    </div>
+	
+	<div id="map-canvas"></div>
+	
+	<div id="listing" ng-show="restaurants">
+	    <div class="control-panel">
+		  <span class="title"> Sort Restaurants By: </span>	
+		  <select id="sort" ng-model="sortOption" ng-change="changed(sortOption)">
+			<option value="rating">Rating</option>
+			<option value="distance" selected="selected">Distance</option>
+			<option value="price">Price</option>
+		  </select>
+		</div>
+		<table id="resultsTable">
+        <tbody>
+		  <tr ng-repeat="restaurant in restaurants" ng-click="clicked(restaurant)">
+			<td class="index">
+				{{restaurant.markerLetter}}
+			</td>
+			<td class="details">
+				<div>
+					<p class="name">{{restaurant.name}}</p>
+					<p class="address">{{restaurant.vicinity}}</p>
+					<p class="varities" ng-show="restaurant.types"><span ng-repeat="type in restaurant.types">{{type}} <b>&middot;</b> </span></p>							
+					<p class="others">
+						<span ng-show="restaurant.rating">						
+							<div class='rating_bar'>
+								<div  class='rating' style='width:{{restaurant.ratingPercentage}}%;'>
+								</div>
+							</div>		
+						</span>
+						<span ng-show="restaurant.distance"> <b>&middot;</b> {{restaurant.distance}}KM</span>
+						<span ng-show="restaurant.price"> <b>&middot;</b> {{restaurant.price}}Rs</span>
+					</p>							
+				</div>
+			</td>
+			<td>
+				<img src="{{restaurant.imageSRC}}" width="100" height="100"/>
+			</td>
+		  </tr>			
+		</tbody>
+      </table>
+    </div>
+    <div id="info-content">
+      <table>
+        <tr id="iw-url-row" class="iw_table_row">
+          <td id="iw-icon" class="iw_table_icon"></td>
+          <td id="iw-url"></td>
+        </tr>
+        <tr id="iw-address-row" class="iw_table_row">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-address"></td>
+        </tr>
+        <tr id="iw-phone-row" class="iw_table_row">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-phone"></td>
+        </tr>
+        <tr id="iw-rating-row" class="iw_table_row">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-rating"></td>
+        </tr>
+        <tr id="iw-website-row" class="iw_table_row">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-website"></td>
+        </tr>
+        <tr id="iw-distance-row" class="iw_table_row">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-distance"></td>
+        </tr>
+      </table>
+    </div>
+</body>
+
+</html>
