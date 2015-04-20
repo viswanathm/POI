@@ -5,38 +5,13 @@
 	<script type="text/javascript" src="js/angular.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-		
-	<script>
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position){
-			currentLocation = position.coords;
-		}, function(error){
-			errorDesc = "";
-			switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    errorDesc = "User denied the request for Geolocation."
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorDesc = "Location information is unavailable."
-                    break;
-                case error.TIMEOUT:
-                    errorDesc = "The request to get user location timed out."
-                    break;
-                case error.UNKNOWN_ERROR:
-                    errorDesc = "An unknown error occurred."
-                    break;
-            }
-		});
-    }
-	</script>
-	
 	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
 	<link rel="stylesheet" href="css/main.css">
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
 	<script type="text/javascript" src="js/eatr-app/app.js"></script>
 	<script type="text/javascript" src="js/eatr-app/controllers/mainController.js"></script>
 </head>
-<body ng-app="EatrApp" ng-controller="mainController" ng-init="init()">
+<body ng-app="EatrApp" ng-controller="mainController">
    <div id="header">
             <span id="logo">EATR</span>			
 			<input id="autocomplete" placeholder="Enter a city" type="text" />
@@ -113,5 +88,4 @@
       </table>
     </div>
 </body>
-
 </html>

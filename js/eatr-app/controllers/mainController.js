@@ -1,15 +1,44 @@
-var map, places, infoWindow, currentLocationMarker;
-var autocomplete;
+var map, places, infoWindow, currentLocationMarker, autocomplete;
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var hostnameRegexp = new RegExp('^https?://.+?/');
 
 app.controller("mainController", function($scope, $http, $filter, $window){
 	var orderBy = $filter('orderBy');
 	$scope.restaurants	= [];	
-	$scope.currentLocation = $window.currentLocation || {'latitude': 15, 'longitude': 0};
-    $scope.init = function() {
+	$scope.currentLocation = {'latitude': 15, 'longitude': 0};
+
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			$scope.$apply(function(){
+				$scope.currentLocation = position.coords;
+			});		  
+		    $scope.initialize(true);
+		}, function(error){
+			var errorDesc = "";
+			switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorDesc = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorDesc = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    errorDesc = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorDesc = "An unknown error occurred."
+                    break;
+            }
+			$scope.$apply(function(){
+				$scope.errorDesc = errorDesc;
+			});
+			$scope.initialize(false);
+		});
+	}	
+	
+    $scope.initialize = function(userLocationDetected) {
 		map = new google.maps.Map(document.getElementById('map-canvas'), {
-			zoom: $window.currentLocation ? 12 : 2,
+			zoom: userLocationDetected ? 13 : 2,
 			center: new google.maps.LatLng($scope.currentLocation.latitude, $scope.currentLocation.longitude),
 			mapTypeControl: false,
 			panControl: false,
@@ -17,15 +46,12 @@ app.controller("mainController", function($scope, $http, $filter, $window){
 			streetViewControl: false
 		});
 		
-		if($window.currentLocation) {
+		if(userLocationDetected) {
 			var markerr = new google.maps.Marker({
 				  position: new google.maps.LatLng($scope.currentLocation.latitude, $scope.currentLocation.longitude),
 				  animation: google.maps.Animation.DROP
 			});
 			markerr.setMap(map);
-		}
-		else {
-			$scope.errorDesc = $window.errorDesc;
 		}
 		
 		var infoContent = document.getElementById('info-content').cloneNode(true);
