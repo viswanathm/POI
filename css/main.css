@@ -140,9 +140,14 @@
 	  }
 	  #info-content {
 		position: relative;
-		display: none;
 		width: 400px;
 		height: 130px;
+	  }
+	  .hide-window {
+		display: none !important;
+	  }
+	  .show-window {
+		display: block !important;
 	  }
 	  #sort{
 		float: right;

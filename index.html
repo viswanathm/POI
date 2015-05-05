@@ -2,7 +2,7 @@
 <head>
 	<title>EATR</title>
 	<!-- INCLUDE REQUIRED THIRD PARTY LIBRARY JAVASCRIPT AND CSS -->
-	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="lib/angular.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
@@ -26,7 +26,7 @@
 	
 	<div id="map-canvas"></div>
 	
-	<div id="listing" ng-show="restaurants">
+	<div id="listing" ng-show="restaurants.length != 0">
 	    <div class="control-panel">
 		  <span class="title"> Sort Restaurants By: </span>	
 		  <select id="sort" ng-model="sortOption" ng-change="changed(sortOption)">
@@ -60,7 +60,7 @@
 		</tbody>
       </table>
     </div>
-    <div id="info-content">
+    <div id="info-content" class="hide-window">
       <table>
         <tr id="iw-url-row" class="iw_table_row">
           <td id="iw-icon" class="iw_table_icon"><img class='hotelIcon' src='{{place.icon}}'/></td>
