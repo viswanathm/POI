@@ -8,14 +8,12 @@
 	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
 	<link rel="stylesheet" href="css/main.css">
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
-	<script type="text/javascript" src="js/eatr-app/app.js"></script>
-	<script type="text/javascript" src="js/eatr-app/controllers/mainController.js"></script>
 </head>
-<body ng-app="EatrApp" ng-controller="mainController">
+<body ng-app="EatrApp" ng-controller="rootController">
    <div id="header">
-            <span id="logo">EATR</span>			
-			<input id="autocomplete" placeholder="Enter a city" type="text" />
-			<span class="error-desc" ng-show="errorDesc">Note: {{errorDesc}}</span>
+		<span id="logo">EATR</span>			
+		<input id="autocomplete" placeholder="Enter a city" type="text" />
+		<span class="error-desc" ng-show="errorDesc">Note: {{errorDesc}}</span>
     </div>
 	
 	<div id="map-canvas"></div>
@@ -31,29 +29,24 @@
 		</div>
 		<table id="resultsTable">
         <tbody>
-		  <tr ng-repeat="restaurant in restaurants" ng-click="clicked(restaurant)">
+		  <tr ng-repeat="place in restaurants" ng-click="clicked(place)">
 			<td class="index">
-				{{restaurant.markerLetter}}
+				{{place.markerLetter}}
 			</td>
 			<td class="details">
 				<div>
-					<p class="name">{{restaurant.name}}</p>
-					<p class="address">{{restaurant.vicinity}}</p>
-					<p class="varities" ng-show="restaurant.types"><span ng-repeat="type in restaurant.types">{{type}} <b>&middot;</b> </span></p>							
+					<p class="name">{{place.name}}</p>
+					<p class="address">{{place.vicinity}}</p>
+					<p class="varities" ng-show="place.types"><span ng-repeat="type in place.types">{{type}} <b>&middot;</b> </span></p>
 					<p class="others">
-						<span ng-show="restaurant.rating">						
-							<div class='rating_bar'>
-								<div  class='rating' style='width:{{restaurant.ratingPercentage}}%;'>
-								</div>
-							</div>		
-						</span>
-						<span ng-show="restaurant.distance"> <b>&middot;</b> {{restaurant.distance}}KM</span>
-						<span ng-show="restaurant.price"> <b>&middot;</b> {{restaurant.price}}Rs</span>
+						<div ng-rating ng-model="place"></div> <!-- Custom Directive -->
+						<span ng-show="place.distance"> <b>&middot;</b> {{place.distance}}KM</span>
+						<span ng-show="place.price"> <b>&middot;</b> {{place.price}}Rs</span>
 					</p>							
 				</div>
 			</td>
 			<td>
-				<img ng-src="{{restaurant.imageSRC}}" width="100" height="100"/>
+				<img ng-src="{{place.imageSRC}}" width="100" height="100"/>
 			</td>
 		  </tr>			
 		</tbody>
@@ -62,30 +55,45 @@
     <div id="info-content">
       <table>
         <tr id="iw-url-row" class="iw_table_row">
-          <td id="iw-icon" class="iw_table_icon"></td>
-          <td id="iw-url"></td>
+          <td id="iw-icon" class="iw_table_icon"><img class='hotelIcon' src='{{place.icon}}'/></td>
+          <td id="iw-url"><b><a href='{{place.url}}'>{{place.name}}</a></b></td>
+        </tr>
+        <tr id="iw-varities-row" class="iw_table_row" ng-show="place.types">
+          <td class="iw_attribute_name"></td>
+          <td id="iw-types"><span ng-repeat="type in place.types">{{type}} <b>&middot;</b> </span></td>
         </tr>
         <tr id="iw-address-row" class="iw_table_row">
           <td class="iw_attribute_name"></td>
-          <td id="iw-address"></td>
+          <td id="iw-address">{{place.vicinity}}</td>
         </tr>
-        <tr id="iw-phone-row" class="iw_table_row">
+        <tr id="iw-rating-row" class="iw_table_row"  ng-show="place.rating">
           <td class="iw_attribute_name"></td>
-          <td id="iw-phone"></td>
+          <td id="iw-rating">
+			<span>						
+				<div class='rating_bar'>
+					<div  class='rating' style='width:{{place.ratingPercentage}}%;'>
+					</div>
+				</div>		
+			</span>
+		  </td>
         </tr>
-        <tr id="iw-rating-row" class="iw_table_row">
+        <tr id="iw-website-row" class="iw_table_row" ng-show="place.website">
           <td class="iw_attribute_name"></td>
-          <td id="iw-rating"></td>
+          <td id="iw-website">{{place.website}}</td>
         </tr>
-        <tr id="iw-website-row" class="iw_table_row">
+        <tr id="iw-distance-row" class="iw_table_row" ng-show="place.distance">
           <td class="iw_attribute_name"></td>
-          <td id="iw-website"></td>
-        </tr>
-        <tr id="iw-distance-row" class="iw_table_row">
-          <td class="iw_attribute_name"></td>
-          <td id="iw-distance"></td>
+          <td id="iw-distance">{{place.distance}} KM</td>
         </tr>
       </table>
     </div>
+		
+	<script type="text/javascript" src="js/eatr-app/app.js"></script>
+	<script type="text/javascript" src="js/eatr-app/directives/rating.js"></script>
+	<script type="text/javascript" src="js/eatr-app/services/InfoWindowService.js"></script>
+	<script type="text/javascript" src="js/eatr-app/services/MarkerService.js"></script>
+	<script type="text/javascript" src="js/eatr-app/services/GoogleMapService.js"></script>
+	<script type="text/javascript" src="js/eatr-app/services/GeoLocationService.js"></script> 
+	<script type="text/javascript" src="js/eatr-app/controllers/rootController.js"></script>
 </body>
 </html>

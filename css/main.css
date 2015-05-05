@@ -141,6 +141,8 @@
 	  #info-content {
 		position: relative;
 		display: none;
+		width: 400px;
+		height: 130px;
 	  }
 	  #sort{
 		float: right;
