@@ -10,14 +10,14 @@
 </head>
 <body ng-app="EatrApp" ng-controller="rootController">
    <div id="header">
-		<span id="logo">EATR</span>			
-		<input id="autocomplete" placeholder="Enter a city" type="text" />
+		<span id="logo">EATR</span>
+		<span eatr-autocomplete></span>
 		<span class="error-desc" ng-show="errorDesc">Note: {{errorDesc}}</span>
     </div>
 	
 	<div id="map-canvas"></div>
 	
-	<div id="listing" ng-show="restaurants.length != 0">
+	<div id="listing" ng-show="restaurants.length !== 0">
 	    <div class="control-panel">
 		  <span class="title"> Sort Restaurants By: </span>	
 		  <select id="sort" ng-model="sortOption" ng-change="changed(sortOption)">
@@ -26,7 +26,7 @@
 			<option value="price">Price</option>
 		  </select>
 		</div>
-		<table id="resultsTable">
+		<table id="results-table">
         <tbody>
 		  <tr ng-repeat="place in restaurants" ng-click="clicked(place)">
 			<td class="index">
@@ -38,23 +38,23 @@
 					<p class="address">{{place.vicinity}}</p>
 					<p class="varities" ng-show="place.types"><span ng-repeat="type in place.types">{{type}} <b>&middot;</b> </span></p>
 					<p class="others">
-						<div ng-rating ng-model="place"></div> <!-- Custom Directive -->
+						<div eatr-rating ng-model="place"></div> <!-- Custom Directive -->
 						<span ng-show="place.distance"> <b>&middot;</b> {{place.distance}}KM</span>
 						<span ng-show="place.price"> <b>&middot;</b> {{place.price}}Rs</span>
 					</p>							
 				</div>
 			</td>
 			<td>
-				<img ng-src="{{place.imageSRC}}" width="100" height="100"/>
+				<img class="place-icon" ng-src="{{place.imageSRC}}"/>
 			</td>
 		  </tr>			
 		</tbody>
       </table>
     </div>
-    <div id="info-content" class="hide-window">
+    <div id="info-content" class="{{showInfoWindow ? 'show-window' : 'hide-window'}}">
       <table>
         <tr>
-          <td><img class='hotelIcon' src='{{place.icon}}'/></td>
+          <td><img class='hotel-icon' src='{{place.icon}}'/></td>
           <td class="details"><b><a class="name">{{place.name}}</a></b></td>
         </tr>
         <tr ng-show="place.types">
@@ -68,7 +68,7 @@
         <tr ng-show="place.rating">
           <td></td>
           <td>
-			<div ng-rating ng-model="place"></div> <!-- Custom Directive -->
+			<div eatr-rating ng-model="place"></div> <!-- Custom Directive -->
 		  </td>
         </tr>
         <tr ng-show="place.website">
@@ -88,6 +88,7 @@
 	
 	<script type="text/javascript" src="js/eatr-app/app.js"></script>
 	<script type="text/javascript" src="js/eatr-app/directives/rating.js"></script>
+	<script type="text/javascript" src="js/eatr-app/directives/autoComplete.js"></script>
 	<script type="text/javascript" src="js/eatr-app/services/InfoWindowService.js"></script>
 	<script type="text/javascript" src="js/eatr-app/services/MarkerService.js"></script>
 	<script type="text/javascript" src="js/eatr-app/services/GoogleMapService.js"></script>

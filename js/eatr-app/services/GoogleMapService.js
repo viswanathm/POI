@@ -1,10 +1,10 @@
-app.service('GoogleMapService', function($q, $timeout, MarkerService, InfoWindowService){
+app.service('GoogleMapService', function($q, $timeout, $window, MarkerService, InfoWindowService){
 	var map, places;
 		
     this.createMap = function(id, currentLocation, userLocationDetected) {
-		map = new google.maps.Map(document.getElementById(id), {
+		map = new $window.google.maps.Map(document.getElementById(id), {
 			zoom: userLocationDetected ? 13 : 2,
-			center: new google.maps.LatLng(currentLocation.latitude, currentLocation.longitude),
+			center: new $window.google.maps.LatLng(currentLocation.latitude, currentLocation.longitude),
 			mapTypeControl: false,
 			panControl: false,
 			zoomControl: true,
@@ -15,12 +15,12 @@ app.service('GoogleMapService', function($q, $timeout, MarkerService, InfoWindow
 			MarkerService.createMarker(currentLocation).setMap(map);
 		}
 		
-		places = new google.maps.places.PlacesService(map);
+		places = new $window.google.maps.places.PlacesService(map);
 	};
 	
 	this.createMarker = function (location, icon, delay) {
 		var marker = MarkerService.createMarker(location, icon);
-		setTimeout(function() {
+		$timeout(function() {
 			marker.setMap(map);
 		}, delay ? (delay * 100) : 0);		
 		return marker;
@@ -55,19 +55,16 @@ app.service('GoogleMapService', function($q, $timeout, MarkerService, InfoWindow
 			};		
 		this.deferredTimer();
 		places.nearbySearch(search, function(results, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
+			if (status == $window.google.maps.places.PlacesServiceStatus.OK) {
 			  // Create a marker for each hotel found, and
 			  // assign a letter of the alphabetic to each marker icon.		  
-			  for (var i = 0; i < results.length; i++) {			
-				results[i].distance = me.getDistance(map.getCenter(), results[i].geometry.location);
-				
-				results[i].imageSRC = results[i].photos && results[i].photos[0] && results[i].photos[0].getUrl({maxHeight: 100, maxWidth: 100});
-							
-				results[i].varities  = results[i].types && (results[i].types.length > 0) && results[i].types.join(" | ");
-				
-				results[i].ratingPercentage = results[i].rating && (Math.round((results[i].rating/5)*100));
-				
-				results[i].markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
+			  for (var i = 0; i < results.length; i++) {
+				var result = results[i];
+				result.distance = me.getDistance(map.getCenter(), result.geometry.location);				
+				result.imageSRC = result.photos && result.photos[0] && result.photos[0].getUrl({maxHeight: 100, maxWidth: 100});							
+				result.varities  = result.types && (result.types.length > 0) && result.types.join(" | ");				
+				result.ratingPercentage = result.rating && (Math.round((result.rating/5)*100));				
+				result.markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
 			  }
 			  deferred.resolve(results);
 			} else {
@@ -82,7 +79,7 @@ app.service('GoogleMapService', function($q, $timeout, MarkerService, InfoWindow
 		this.deferredTimer(10);
 		places.getDetails({placeId: place_id},
 		  function(place, status) {
-			if (status != google.maps.places.PlacesServiceStatus.OK) {
+			if (status != $window.google.maps.places.PlacesServiceStatus.OK) {
 				deferred.reject(null);
 			}
 			InfoWindowService.getInfoWindow().open(map, marker);

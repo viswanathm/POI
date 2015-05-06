@@ -20,6 +20,8 @@ app.service('GeoLocationService', function($q, $timeout){
 					case error.UNKNOWN_ERROR:
 						errorDesc = "An unknown error occurred."
 						break;
+					default:
+						errorDesc = "Unable to fetch user's current location"
 				}
 				deferred.reject(errorDesc);
 			});

@@ -1,7 +1,8 @@
-app.controller("rootController", function($scope, $http, $filter, $window, GeoLocationService, GoogleMapService){	
+app.controller("rootController", function($scope, $http, $filter, $timeout, GeoLocationService, GoogleMapService){	
 	$scope.restaurants	= [];
 	$scope.currentLocation = {'latitude': 15, 'longitude': 0};
 	$scope.place = {};
+	$scope.showInfoWindow = false;
 	
 	GeoLocationService.getCurrentGeoLocation().then(
 		function(res) {
@@ -24,33 +25,9 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 	$scope.clicked = function(restaurant) {		
 		google.maps.event.trigger(restaurant.marker, 'click');
 	};
-	
-    function initialize(userLocationDetected) {
-		GoogleMapService.createMap('map-canvas', $scope.currentLocation, userLocationDetected);
-		GoogleMapService.createInfoWindow('info-content');
-
-		// Create the autocomplete object and associate it with the UI input control.
-		// Restrict the search to the default country, and to place type "cities".
-		var autocomplete = new google.maps.places.Autocomplete(
-			 /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
-			{
-				types: ['(cities)'],
-				componentRestrictions: []
-			});
-		
-		google.maps.event.addListener(autocomplete, 'place_changed', function(){
-			var place = autocomplete.getPlace();
-			if (place.geometry) {
-				GoogleMapService.panZoom(place.geometry.location, 15);
-				search();
-			} else {
-				document.getElementById('autocomplete').placeholder = 'Enter a city';
-			}			
-		});	
-	};
 
 	// Search for hotels in the selected city, within the viewport of the map.
-	function search() {
+	$scope.search = function() {
 		GoogleMapService.search().then(
 			function(res) {
 				clearMarkers();
@@ -61,6 +38,11 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 				$scope.restaurants = res;
 			}
 		);	
+	};
+	
+    function initialize(userLocationDetected) {
+		GoogleMapService.createMap('map-canvas', $scope.currentLocation, userLocationDetected);
+		GoogleMapService.createInfoWindow('info-content');
 	};
 
 	function addMarkers() {
@@ -79,10 +61,10 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 			restaurant.markerLetter = markerLetter;
 			google.maps.event.addListener(restaurant.marker, 'click', function(){
 				$scope.place = restaurant;
-				GoogleMapService.showInfoWindow(this, restaurant.geometry.location);				
-				document.getElementById('info-content').className = "show-window";
+				GoogleMapService.showInfoWindow(this, restaurant.geometry.location);
+				$scope.showInfoWindow = true;
 			});
-			setTimeout(GoogleMapService.dropMarker(restaurant.marker), i * 100);
+			$timeout(GoogleMapService.dropMarker(restaurant.marker), i * 100);
 		});
 	};
 	
@@ -92,20 +74,5 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 		  $scope.restaurants[i].marker.setMap(null);
 		}
 	  }
-	}
-
-	// Get the place details for a hotel. Show the information in an info window,
-	// anchored on the marker for the hotel that the user selected.
-	// This is for future implementation to get additional details of any place.
-	function showInfoWindow() {
-		var marker = this; 	 
-		GoogleMapService.getPlaceDetails(marker.placeResult.place_id, marker).then(
-			function(res) {
-				$scope.place = res;
-			},
-			function(res) {
-				//nothing to build
-			}
-		);
 	}
 });
