@@ -1,20 +1,31 @@
 app.controller("rootController", function($scope, $http, $filter, $window, GeoLocationService, GoogleMapService){	
-	$scope.restaurants	= [];	
+	$scope.restaurants	= [];
 	$scope.currentLocation = {'latitude': 15, 'longitude': 0};
 	$scope.place = {};
 	
 	GeoLocationService.getCurrentGeoLocation().then(
 		function(res) {
 			$scope.currentLocation = res;
-			$scope.initialize(true);
+			initialize(true);
 		},
 		function(res) {
 			$scope.errorDesc = res;
-			$scope.initialize(false);
+			initialize(false);
 		}
 	);
+		
+	$scope.changed = function(prop) {
+		var orderBy = $filter('orderBy');
+		clearMarkers();
+		$scope.restaurants = orderBy($scope.restaurants, prop);
+		addMarkers();
+	};
+		
+	$scope.clicked = function(restaurant) {		
+		google.maps.event.trigger(restaurant.marker, 'click');
+	};
 	
-    $scope.initialize = function(userLocationDetected) {
+    function initialize(userLocationDetected) {
 		GoogleMapService.createMap('map-canvas', $scope.currentLocation, userLocationDetected);
 		GoogleMapService.createInfoWindow('info-content');
 
@@ -31,26 +42,15 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 			var place = autocomplete.getPlace();
 			if (place.geometry) {
 				GoogleMapService.panZoom(place.geometry.location, 15);
-				$scope.search();
+				search();
 			} else {
 				document.getElementById('autocomplete').placeholder = 'Enter a city';
 			}			
 		});	
 	};
-		
-	$scope.changed = function(prop) {
-		var orderBy = $filter('orderBy');
-		clearMarkers();
-		$scope.restaurants = orderBy($scope.restaurants, prop);
-		addMarkers();
-	};
-		
-	$scope.clicked = function(restaurant) {		
-		google.maps.event.trigger(restaurant.marker, 'click');
-	};
 
 	// Search for hotels in the selected city, within the viewport of the map.
-	$scope.search = function() {
+	function search() {
 		GoogleMapService.search().then(
 			function(res) {
 				clearMarkers();
@@ -79,7 +79,8 @@ app.controller("rootController", function($scope, $http, $filter, $window, GeoLo
 			restaurant.markerLetter = markerLetter;
 			google.maps.event.addListener(restaurant.marker, 'click', function(){
 				$scope.place = restaurant;
-				GoogleMapService.showInfoWindow(this, restaurant.geometry.location);
+				GoogleMapService.showInfoWindow(this, restaurant.geometry.location);				
+				document.getElementById('info-content').className = "show-window";
 			});
 			setTimeout(GoogleMapService.dropMarker(restaurant.marker), i * 100);
 		});

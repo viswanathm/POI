@@ -112,12 +112,12 @@ app.service('GoogleMapService', function($q, $timeout, MarkerService, InfoWindow
 	  var R = 6378137; // Earth’s mean radius in meter
 	  var dLat = this.rad(p2.lat() - p1.lat());
 	  var dLong = this.rad(p2.lng() - p1.lng());
-	  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+	  var quotient = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 		Math.cos(this.rad(p1.lat())) * Math.cos(this.rad(p2.lat())) *
 		Math.sin(dLong / 2) * Math.sin(dLong / 2);
-	  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	  var d = (R * c)/1000;
-	  var roundedD = Math.round(d * 100) / 100
-	  return roundedD; // returns the distance in miles
+	  var arcTangent = 2 * Math.atan2(Math.sqrt(quotient), Math.sqrt(1 - quotient));
+	  var distance = (R * arcTangent)/1000;
+	  var roundedDisatnce = Math.round(distance * 100) / 100
+	  return roundedDisatnce; // returns the distance in miles
 	};	
 });

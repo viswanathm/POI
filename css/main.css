@@ -78,10 +78,6 @@
         width: 100%;
 		display: none;
       }
-	  .details .name{
-		font-weight: bold;
-		font-size: 14px;
-	  }
       .placeIcon {
         width: 20px;
         height: 34px;
@@ -114,23 +110,13 @@
 		padding-left: 5px;
 	  }
 	  
-	  #resultsTable tr td.details p.name{		
+	  .name{		
 		font-size: 18px;
 		font-weight: bold;
 	  }
 	  #rating {
         font-size: 13px;
         font-family: Arial Unicode MS;
-      }
-      .iw_table_row {
-        height: 18px;
-      }
-      .iw_attribute_name {
-        font-weight: bold;
-        text-align: right;
-      }
-      .iw_table_icon {
-        text-align: right;
       }
 	  #iw-url a{	
 		text-decoration: none;
