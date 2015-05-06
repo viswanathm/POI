@@ -63,7 +63,7 @@ app.service('GoogleMapService', function($q, $timeout, $window, MarkerService, I
 				result.distance = me.getDistance(map.getCenter(), result.geometry.location);				
 				result.imageSRC = result.photos && result.photos[0] && result.photos[0].getUrl({maxHeight: 100, maxWidth: 100});							
 				result.varities  = result.types && (result.types.length > 0) && result.types.join(" | ");				
-				result.ratingPercentage = result.rating && (Math.round((result.rating/5)*100));				
+				result.ratingPercentage = result.rating ? (Math.round((result.rating/5)*100))+"%" : 0+"%";
 				result.markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
 			  }
 			  deferred.resolve(results);
